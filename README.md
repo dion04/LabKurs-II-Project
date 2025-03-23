@@ -1,4 +1,4 @@
-# React & Express Starter Project
+# Crowd sourced news platform
 
 This is a project for Ubt Lab Course II, a crowd-sourced news platform. The project is structured with two main folders:
 
