@@ -1,6 +1,6 @@
 # React & Express Starter Project
 
-This is a project for Ubt Lab Course II, a crowd sourced news platform. The project is structured with two main folders:
+This is a project for Ubt Lab Course II, a crowd-sourced news platform. The project is structured with two main folders:
 
 - `client/` - Contains the React application.
 - `server/` - Contains the Express backend.
@@ -13,8 +13,23 @@ Make sure you have the following installed on your system:
 
 - [Node.js](https://nodejs.org/) (LTS version recommended)
 - [npm](https://www.npmjs.com/)
+- PostgreSQL (Ensure the database service is running)
 
-### Installation
+#### Database Configuration
+
+Ensure you have a PostgreSQL database set up with the following configuration:
+
+```json
+{
+    "username": "postgres",
+    "password": "1234",
+    "database": "LabCourseII",
+    "host": "localhost",
+    "dialect": "postgres"
+}
+```
+
+## Installation
 
 #### 1. Clone the Repository
 
@@ -57,7 +72,7 @@ cd client
 npm run dev
 ```
 
-This starts the React development server on `http://localhost:5137` .
+This starts the React development server on `http://localhost:5137`.
 
 ## Project Structure
 
