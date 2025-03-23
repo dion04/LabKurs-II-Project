@@ -1,3 +1,4 @@
+// filepath: server/models/user.js
 'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
@@ -8,11 +9,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       email: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
         validate: {
           isEmail: true
         }
@@ -20,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      role: {
+        type: DataTypes.ENUM('user', 'admin'),
+        defaultValue: 'user'
       }
     },
     {

@@ -34,7 +34,7 @@ function Dashboard() {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
-        setUsers(response.data.data)
+        setUsers(response.data.data.users)
       } catch (err) {
         setError('Failed to fetch users')
         console.error(err)

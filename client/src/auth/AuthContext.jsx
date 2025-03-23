@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
               headers: { Authorization: `Bearer ${token}` }
             }
           )
-          setUser(response.data)
+          setUser(response.data.data.user)
         } catch (error) {
           console.error('Failed to fetch user:', error)
           logout()
@@ -40,10 +40,13 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/login', {
-        email,
-        password
-      })
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/login',
+        {
+          email,
+          password
+        }
+      )
       setToken(response.data.token)
       return { success: true }
     } catch (error) {
@@ -57,7 +60,7 @@ export function AuthProvider({ children }) {
   const register = async (userData) => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/register',
+        'http://localhost:8080/api/auth/register',
         userData
       )
       setToken(response.data.token)
