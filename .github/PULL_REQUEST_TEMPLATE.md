@@ -11,5 +11,6 @@ Link to the issue this PR addresses (if applicable).
 Include screenshots or GIFs if your changes affect the UI.  
 
 ## Checklist  
-- [ ] Code follows coding standards.  
-- [ ] Documentation has been updated (if needed).  
+- [ ] Code follows coding standards.
+- [ ] No console logs or debug code.
+- [ ] Ui is close to design (if we decide to do one).
