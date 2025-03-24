@@ -42,7 +42,11 @@ function UserList({ users, error }) {
                     <div className='avatar'>
                       <div className='mask mask-squircle w-10 h-10'>
                         <img
-                          src={`https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=random`}
+                          src={
+                            user.profileImageUrl
+                              ? user.profileImageUrl
+                              : `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=random`
+                          }
                           alt={`${user.firstName} ${user.lastName}`}
                         />
                       </div>

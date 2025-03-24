@@ -5,41 +5,29 @@ const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'))
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token)
-
-      // Fetch user info if we have a token
-      const fetchUser = async () => {
-        try {
-          const response = await axios.get(
-            'http://localhost:8080/api/users/me',
-            {
-              headers: { Authorization: `Bearer ${token}` }
-            }
-          )
-          setUser(response.data.data.user)
-        } catch (error) {
-          console.error('Failed to fetch user:', error)
-          logout()
-        } finally {
-          setLoading(false)
-        }
-      }
-
-      fetchUser()
     } else {
       localStorage.removeItem('token')
+      localStorage.removeItem('user')
       setUser(null)
-      setLoading(false)
     }
+    setLoading(false)
   }, [token])
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user))
+    }
+  }, [user])
 
   const login = async (email, password) => {
     try {
+      setLoading(true)
       const response = await axios.post(
         'http://localhost:8080/api/auth/login',
         {
@@ -48,35 +36,74 @@ export function AuthProvider({ children }) {
         }
       )
       setToken(response.data.token)
+      setUser(response.data.data.user)
       return { success: true }
     } catch (error) {
       return {
         success: false,
         error: error.response?.data?.error || 'Login failed'
       }
+    } finally {
+      setLoading(false)
     }
   }
 
   const register = async (userData) => {
     try {
+      setLoading(true)
+      // Check if userData is FormData (contains file)
+      const isFormData = userData instanceof FormData
+
+      const headers = isFormData
+        ? { 'Content-Type': 'multipart/form-data' }
+        : { 'Content-Type': 'application/json' }
+
       const response = await axios.post(
         'http://localhost:8080/api/auth/register',
-        userData
+        userData,
+        { headers }
       )
+
       setToken(response.data.token)
+      setUser(response.data.data.user)
       return { success: true }
     } catch (error) {
       return {
         success: false,
         error: error.response?.data?.error || 'Registration failed'
       }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateProfile = async (userData) => {
+    try {
+      const isFormData = userData instanceof FormData
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
+      }
+
+      const response = await axios.patch(
+        'http://localhost:8080/api/users/profile',
+        userData,
+        { headers }
+      )
+
+      setUser(response.data.data.user)
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Profile update failed'
+      }
     }
   }
 
   const logout = () => {
     setToken(null)
-    localStorage.removeItem('token')
-    setUser(null)
   }
 
   const value = {
@@ -86,6 +113,7 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    updateProfile,
     isAuthenticated: !!token
   }
 

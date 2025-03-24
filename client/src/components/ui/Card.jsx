@@ -1,4 +1,12 @@
 function Card({ article }) {
+  // Helper function to get author image
+  const getAuthorImage = () => {
+    if (article.authorImage) {
+      return article.authorImage
+    }
+    return `https://ui-avatars.com/api/?name=${article.author}&background=random`
+  }
+
   return (
     <div className='card bg-base-100 shadow-xl'>
       <figure>
@@ -11,10 +19,7 @@ function Card({ article }) {
         <div className='flex items-center mt-4'>
           <div className='avatar'>
             <div className='w-8 rounded-full'>
-              <img
-                src={`https://ui-avatars.com/api/?name=${article.author}&background=random`}
-                alt={article.author}
-              />
+              <img src={getAuthorImage()} alt={article.author} />
             </div>
           </div>
           <div className='ml-2'>

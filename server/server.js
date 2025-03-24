@@ -6,6 +6,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { errorHandler } = require('./middlewares/errorMiddleware')
 const routes = require('./routes')
+const fileparser = require('./utils/fileParser')
 // Initialize Express app
 const app = express()
 

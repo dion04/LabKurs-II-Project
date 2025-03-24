@@ -7,9 +7,19 @@ const {
 
 const router = express.Router()
 
+// Skip validation for multipart/form-data requests
 router.post(
   '/register',
-  validate(userValidationRules.register),
+  (req, res, next) => {
+    if (
+      req.headers['content-type'] &&
+      req.headers['content-type'].includes('multipart/form-data')
+    ) {
+      return authController.register(req, res, next)
+    }
+    // Only apply validation for JSON requests
+    return validate(userValidationRules.register)(req, res, next)
+  },
   authController.register
 )
 

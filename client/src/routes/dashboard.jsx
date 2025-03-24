@@ -23,11 +23,152 @@ export const Route = createFileRoute('/dashboard')({
 })
 
 function Dashboard() {
-  const { user } = useAuth()
+  const { user, updateProfile } = useAuth()
+  console.log(user)
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState('overview')
+
+  // Profile update states
+  const [profileData, setProfileData] = useState({
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    bio: user?.bio || ''
+  })
+  const [profileImage, setProfileImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Password change states
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  })
+  const [isPasswordUpdating, setIsPasswordUpdating] = useState(false)
+
+  // Update user state when it becomes available
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        bio: user.bio || ''
+      })
+    }
+  }, [user])
+
+  // Handle profile form input changes
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target
+    setProfileData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  // Handle profile image change
+  const handleProfileImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      setProfileImage(file)
+
+      // Create preview URL
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  // Handle profile update submission
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      let updateData
+
+      if (profileImage) {
+        // Create FormData for file upload
+        updateData = new FormData()
+        updateData.append('file', profileImage)
+
+        // Add other form fields
+        Object.entries(profileData).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            updateData.append(key, value)
+          }
+        })
+      } else {
+        updateData = { ...profileData }
+      }
+
+      const result = await updateProfile(updateData)
+
+      if (result.success) {
+        // Show success message
+        alert('Profile updated successfully')
+        // Reset image state since it's been uploaded
+        setProfileImage(null)
+      } else {
+        alert(result.error || 'Failed to update profile')
+      }
+    } catch (err) {
+      console.error('Profile update error:', err)
+      alert('An error occurred while updating your profile')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Handle password form input changes
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target
+    setPasswordData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  // Handle password update submission
+  const handlePasswordUpdate = async (e) => {
+    e.preventDefault()
+
+    // Validate passwords
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert("New passwords don't match")
+      return
+    }
+
+    setIsPasswordUpdating(true)
+
+    try {
+      // Use axios directly or add a method to AuthContext
+      const response = await axios.patch(
+        'http://localhost:8080/api/users/password',
+        {
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      )
+
+      if (response.data.success) {
+        alert('Password updated successfully')
+        // Clear password fields
+        setPasswordData({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        })
+      }
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to update password')
+    } finally {
+      setIsPasswordUpdating(false)
+    }
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -167,7 +308,6 @@ function Dashboard() {
             <UserList users={users} error={error} />
           </div>
         )}
-
         {activeTab === 'settings' && (
           <div>
             <h3 className='text-xl font-bold mb-6'>Account Settings</h3>
@@ -175,7 +315,33 @@ function Dashboard() {
             <div className='card bg-base-200 mb-6'>
               <div className='card-body'>
                 <h4 className='card-title text-lg'>Profile Information</h4>
-                <form className='mt-4 space-y-4'>
+                <form className='mt-4 space-y-4' onSubmit={handleProfileUpdate}>
+                  <div className='form-control'>
+                    <label className='label'>
+                      <span className='label-text'>Profile Image</span>
+                    </label>
+                    <div className='flex items-center space-x-4'>
+                      <div className='avatar'>
+                        <div className='w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
+                          <img
+                            src={
+                              imagePreview ||
+                              user?.profileImageUrl ||
+                              `https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=random`
+                            }
+                            alt='Profile'
+                          />
+                        </div>
+                      </div>
+                      <input
+                        type='file'
+                        onChange={handleProfileImageChange}
+                        className='file-input file-input-bordered w-full max-w-xs'
+                        accept='image/*'
+                      />
+                    </div>
+                  </div>
+
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <div className='form-control'>
                       <label className='label'>
@@ -183,8 +349,10 @@ function Dashboard() {
                       </label>
                       <input
                         type='text'
+                        name='firstName'
                         className='input input-bordered'
-                        defaultValue={user?.firstName || ''}
+                        value={profileData.firstName}
+                        onChange={handleProfileChange}
                       />
                     </div>
                     <div className='form-control'>
@@ -193,8 +361,10 @@ function Dashboard() {
                       </label>
                       <input
                         type='text'
+                        name='lastName'
                         className='input input-bordered'
-                        defaultValue={user?.lastName || ''}
+                        value={profileData.lastName}
+                        onChange={handleProfileChange}
                       />
                     </div>
                   </div>
@@ -205,7 +375,7 @@ function Dashboard() {
                     <input
                       type='email'
                       className='input input-bordered'
-                      defaultValue={user?.email || ''}
+                      value={user?.email || ''}
                       readOnly
                     />
                   </div>
@@ -213,10 +383,21 @@ function Dashboard() {
                     <label className='label'>
                       <span className='label-text'>Bio</span>
                     </label>
-                    <textarea className='textarea textarea-bordered h-24'></textarea>
+                    <textarea
+                      className='textarea textarea-bordered h-24'
+                      name='bio'
+                      value={profileData.bio || ''}
+                      onChange={handleProfileChange}
+                    ></textarea>
                   </div>
                   <div className='form-control mt-6'>
-                    <button className='btn btn-primary'>Save Changes</button>
+                    <button className='btn btn-primary' disabled={isSubmitting}>
+                      {isSubmitting ? (
+                        <span className='loading loading-spinner loading-sm'></span>
+                      ) : (
+                        'Save Changes'
+                      )}
+                    </button>
                   </div>
                 </form>
               </div>
@@ -225,27 +406,57 @@ function Dashboard() {
             <div className='card bg-base-200'>
               <div className='card-body'>
                 <h4 className='card-title text-lg'>Security</h4>
-                <form className='mt-4 space-y-4'>
+                <form
+                  className='mt-4 space-y-4'
+                  onSubmit={handlePasswordUpdate}
+                >
                   <div className='form-control'>
                     <label className='label'>
                       <span className='label-text'>Current Password</span>
                     </label>
-                    <input type='password' className='input input-bordered' />
+                    <input
+                      type='password'
+                      className='input input-bordered'
+                      name='currentPassword'
+                      value={passwordData.currentPassword}
+                      onChange={handlePasswordChange}
+                    />
                   </div>
                   <div className='form-control'>
                     <label className='label'>
                       <span className='label-text'>New Password</span>
                     </label>
-                    <input type='password' className='input input-bordered' />
+                    <input
+                      type='password'
+                      className='input input-bordered'
+                      name='newPassword'
+                      value={passwordData.newPassword}
+                      onChange={handlePasswordChange}
+                    />
                   </div>
                   <div className='form-control'>
                     <label className='label'>
                       <span className='label-text'>Confirm New Password</span>
                     </label>
-                    <input type='password' className='input input-bordered' />
+                    <input
+                      type='password'
+                      className='input input-bordered'
+                      name='confirmPassword'
+                      value={passwordData.confirmPassword}
+                      onChange={handlePasswordChange}
+                    />
                   </div>
                   <div className='form-control mt-6'>
-                    <button className='btn btn-primary'>Change Password</button>
+                    <button
+                      className='btn btn-primary'
+                      disabled={isPasswordUpdating}
+                    >
+                      {isPasswordUpdating ? (
+                        <span className='loading loading-spinner loading-sm'></span>
+                      ) : (
+                        'Change Password'
+                      )}
+                    </button>
                   </div>
                 </form>
               </div>

@@ -48,7 +48,11 @@ function DashboardStats({ user }) {
           <div className='avatar'>
             <div className='w-16 rounded-full'>
               <img
-                src={`https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=random`}
+                src={
+                  user.profileImageUrl
+                    ? user.profileImageUrl
+                    : 'https://ui-avatars.com/api/?name=John+Doe&background=random'
+                }
               />
             </div>
           </div>

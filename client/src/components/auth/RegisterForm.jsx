@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '../../auth/AuthContext'
 
@@ -8,6 +8,7 @@ function RegisterForm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [step, setStep] = useState(1)
+  const [profileImage, setProfileImage] = useState(null)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,12 +16,19 @@ function RegisterForm() {
     password: '',
     confirmPassword: ''
   })
+  const fileInputRef = useRef(null)
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
+  }
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setProfileImage(e.target.files[0])
+    }
   }
 
   const validateStepOne = () => {
@@ -54,8 +62,22 @@ function RegisterForm() {
     setLoading(true)
 
     try {
-      // Remove confirmPassword before sending to API
-      const { confirmPassword, ...userData } = formData
+      // Create FormData if there's a profile image
+      let userData
+      if (profileImage) {
+        userData = new FormData()
+        userData.append('file', profileImage)
+        // Add other form fields
+        Object.keys(formData).forEach((key) => {
+          if (key !== 'confirmPassword') {
+            userData.append(key, formData[key])
+          }
+        })
+      } else {
+        // Remove confirmPassword before sending to API
+        const { confirmPassword, ...rest } = formData
+        userData = rest
+      }
 
       const result = await register(userData)
 
@@ -136,6 +158,19 @@ function RegisterForm() {
                   value={formData.lastName}
                   onChange={handleChange}
                   required
+                />
+              </div>
+
+              <div className='form-control mt-4'>
+                <label className='label'>
+                  <span className='label-text'>Profile Picture (Optional)</span>
+                </label>
+                <input
+                  type='file'
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className='file-input file-input-bordered w-full'
+                  accept='image/*'
                 />
               </div>
 

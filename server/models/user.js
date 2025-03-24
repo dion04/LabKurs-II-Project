@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.ENUM('user', 'admin'),
         defaultValue: 'user'
+      },
+      profileImageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     },
     {

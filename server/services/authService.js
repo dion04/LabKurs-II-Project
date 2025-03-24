@@ -26,6 +26,7 @@ exports.register = async (userData) => {
   return { user, token }
 }
 
+// Update the login function to return more user data
 exports.login = async (email, password) => {
   const user = await userRepository.findByEmail(email)
   if (!user) {
@@ -37,14 +38,22 @@ exports.login = async (email, password) => {
     throw new AppError('Invalid email or password', 401)
   }
 
-  const token = signToken({ id: user.id })
+  const token = signToken({
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    role: user.role
+  })
 
   return {
     user: {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email
+      email: user.email,
+      role: user.role,
+      profileImageUrl: user.profileImageUrl
     },
     token
   }

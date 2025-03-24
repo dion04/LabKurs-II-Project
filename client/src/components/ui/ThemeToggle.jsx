@@ -1,6 +1,6 @@
 function ThemeToggle({ theme, toggleTheme }) {
   return (
-    <label className='swap swap-rotate mr-2'>
+    <label className='swap swap-rotate mr-4'>
       <input
         type='checkbox'
         onChange={toggleTheme}

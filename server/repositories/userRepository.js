@@ -23,7 +23,14 @@ exports.create = async (userData) => {
 
 exports.findAll = async () => {
   return await db.User.findAll({
-    attributes: ['id', 'firstName', 'lastName', 'email', 'role']
+    attributes: [
+      'id',
+      'firstName',
+      'lastName',
+      'email',
+      'role',
+      'profileImageUrl'
+    ]
   })
 }
 

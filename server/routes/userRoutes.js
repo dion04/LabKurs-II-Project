@@ -1,4 +1,3 @@
-// filepath: server/routes/userRoutes.js
 const express = require('express')
 const userController = require('../controllers/userController')
 const { authenticateToken } = require('../middlewares/authMiddleware')
@@ -9,5 +8,6 @@ router.use(authenticateToken)
 
 router.get('/me', userController.getProfile)
 router.get('/', userController.getAllUsers)
+router.patch('/profile', userController.updateProfile)
 
 module.exports = router

@@ -1,9 +1,18 @@
 import { Link } from '@tanstack/react-router'
 import { useAuth } from '../../auth/AuthContext'
 import ThemeToggle from '../ui/ThemeToggle'
+import AppLogo from '../../assets/AppLogo.png'
 
 function Navbar({ theme, toggleTheme, scrolled }) {
   const { isAuthenticated, logout, user } = useAuth()
+
+  // Generate the profile image source
+  const getProfileImage = () => {
+    if (user?.profileImageUrl) {
+      return user.profileImageUrl
+    }
+    return `https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=random`
+  }
 
   return (
     <div className='fixed top-0 left-0 right-0 z-50 px-4 py-3'>
@@ -47,12 +56,12 @@ function Navbar({ theme, toggleTheme, scrolled }) {
               )}
             </ul>
           </div>
-          <Link to='/' className='btn btn-ghost text-xl'>
-            The People's Voice
+          <Link to='/' className='flex items-center px-3 py-1 ml-2 text-xl'>
+            <img src={AppLogo} alt='App Logo' className='w-32' />
           </Link>
         </div>
         <div className='navbar-center hidden lg:flex'>
-          <ul className='menu menu-horizontal px-1'>
+          <ul className='menu menu-horizontal px-1 gap-1.5'>
             <li>
               <Link to='/' className='[&.active]:font-bold'>
                 Home
@@ -82,11 +91,8 @@ function Navbar({ theme, toggleTheme, scrolled }) {
                 role='button'
                 className='btn btn-ghost btn-circle avatar'
               >
-                <div className='w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
-                  <img
-                    alt='User avatar'
-                    src={`https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=random`}
-                  />
+                <div className='w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 mr-2'>
+                  <img alt='User avatar' src={getProfileImage()} />
                 </div>
               </div>
               <ul
@@ -106,10 +112,7 @@ function Navbar({ theme, toggleTheme, scrolled }) {
             </div>
           ) : (
             <div className='flex'>
-              <Link
-                to='/login'
-                className='btn btn-ghost btn-sm mr-2 hover:bg-base-200'
-              >
+              <Link to='/login' className='btn btn-ghost btn-sm mr-2'>
                 Login
               </Link>
               <Link to='/register' className='btn btn-primary btn-sm'>
