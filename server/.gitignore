@@ -19,7 +19,8 @@ yarn-error.log*
 *.sqlite3
 
 # Sequelize migrations and seeders
-migrations/
+# Might need to add these back idk
+# migrations/
 seeders/
 
 # Build files
