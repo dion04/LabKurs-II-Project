@@ -2,8 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../auth/AuthContext'
 import axios from 'axios'
-import { protectRoute } from '../utils/index.utils'
 import { redirect } from '@tanstack/react-router'
+import DashboardStats from '../components/dashboard/DashboardStats'
+import DashboardTabs from '../components/dashboard/DashboardTabs'
+import UserList from '../components/dashboard/UserList'
 
 export const Route = createFileRoute('/dashboard')({
   beforeLoad: async ({ location }) => {
@@ -25,6 +27,7 @@ function Dashboard() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [activeTab, setActiveTab] = useState('overview')
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -43,50 +46,211 @@ function Dashboard() {
       }
     }
 
-    fetchUsers()
-  }, [])
+    if (activeTab === 'users') {
+      fetchUsers()
+    } else {
+      setLoading(false)
+    }
+  }, [activeTab])
 
-  if (loading) return <div>Loading...</div>
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-96'>
+        <span className='loading loading-spinner loading-lg'></span>
+      </div>
+    )
+  }
 
   return (
-    <div className='max-w-4xl mx-auto p-6'>
-      <h1 className='text-2xl font-bold mb-6'>Dashboard</h1>
-
-      {user && (
-        <div className='stats shadow'>
-          <div className='stat'>
-            <div className='stat-title'>Welcome back!</div>
-            <div className='stat-value'>
-              {user.firstName + ' ' + user.lastName}
-            </div>
-            <div className='stat-desc'>{user.email}</div>
-          </div>
+    <div className='container mx-auto p-4'>
+      {/* Dashboard Header */}
+      <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-8'>
+        <div>
+          <h1 className='text-3xl font-bold'>Dashboard</h1>
+          <p className='text-base-content/70'>
+            Welcome back, {user?.firstName}!
+          </p>
         </div>
-      )}
+        <div className='mt-4 md:mt-0'>
+          <button className='btn btn-primary'>Create New Article</button>
+        </div>
+      </div>
 
-      {error && (
-        <div className='mb-4 p-2 bg-red-100 text-red-700 rounded'>{error}</div>
-      )}
+      <DashboardStats user={user} />
+      <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <div>
-        <h2 className='text-xl font-semibold mb-4'>All Users</h2>
-        {users.length > 0 ? (
-          <ul className='divide-y divide-gray-200'>
-            {users.map((user) => (
-              <li key={user.id} className='py-3'>
-                <div className='flex items-center space-x-4'>
-                  <div className='flex-1 min-w-0'>
-                    <p className='font-medium'>
-                      {user.firstName} {user.lastName}
-                    </p>
-                    <p className='text-gray-500 truncate'>{user.email}</p>
-                  </div>
+      {/* Tab Content */}
+      <div className='bg-base-100 p-6 rounded-box shadow-lg'>
+        {activeTab === 'overview' && (
+          <div>
+            <div className='flex flex-col md:flex-row gap-8'>
+              <div className='flex-1'>
+                <h3 className='text-xl font-bold mb-4'>Recent Activity</h3>
+                <div className='alert'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    className='stroke-info shrink-0 w-6 h-6'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                    ></path>
+                  </svg>
+                  <span>
+                    No recent activity. Start by creating your first article!
+                  </span>
                 </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No users found.</p>
+              </div>
+
+              <div className='w-full md:w-80'>
+                <h3 className='text-xl font-bold mb-4'>Notifications</h3>
+                <div className='alert'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    className='stroke-info shrink-0 w-6 h-6'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                    ></path>
+                  </svg>
+                  <span>No new notifications.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'articles' && (
+          <div>
+            <div className='flex justify-between items-center mb-6'>
+              <h3 className='text-xl font-bold'>My Articles</h3>
+              <div className='join'>
+                <button className='join-item btn btn-sm'>All</button>
+                <button className='join-item btn btn-sm'>Published</button>
+                <button className='join-item btn btn-sm'>Drafts</button>
+              </div>
+            </div>
+
+            <div className='alert'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                className='stroke-info shrink-0 w-6 h-6'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                ></path>
+              </svg>
+              <span>
+                No articles yet. Click "Create New Article" to get started!
+              </span>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'users' && (
+          <div>
+            <h3 className='text-xl font-bold mb-6'>All Users</h3>
+            <UserList users={users} error={error} />
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div>
+            <h3 className='text-xl font-bold mb-6'>Account Settings</h3>
+
+            <div className='card bg-base-200 mb-6'>
+              <div className='card-body'>
+                <h4 className='card-title text-lg'>Profile Information</h4>
+                <form className='mt-4 space-y-4'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    <div className='form-control'>
+                      <label className='label'>
+                        <span className='label-text'>First Name</span>
+                      </label>
+                      <input
+                        type='text'
+                        className='input input-bordered'
+                        defaultValue={user?.firstName || ''}
+                      />
+                    </div>
+                    <div className='form-control'>
+                      <label className='label'>
+                        <span className='label-text'>Last Name</span>
+                      </label>
+                      <input
+                        type='text'
+                        className='input input-bordered'
+                        defaultValue={user?.lastName || ''}
+                      />
+                    </div>
+                  </div>
+                  <div className='form-control'>
+                    <label className='label'>
+                      <span className='label-text'>Email</span>
+                    </label>
+                    <input
+                      type='email'
+                      className='input input-bordered'
+                      defaultValue={user?.email || ''}
+                      readOnly
+                    />
+                  </div>
+                  <div className='form-control'>
+                    <label className='label'>
+                      <span className='label-text'>Bio</span>
+                    </label>
+                    <textarea className='textarea textarea-bordered h-24'></textarea>
+                  </div>
+                  <div className='form-control mt-6'>
+                    <button className='btn btn-primary'>Save Changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div className='card bg-base-200'>
+              <div className='card-body'>
+                <h4 className='card-title text-lg'>Security</h4>
+                <form className='mt-4 space-y-4'>
+                  <div className='form-control'>
+                    <label className='label'>
+                      <span className='label-text'>Current Password</span>
+                    </label>
+                    <input type='password' className='input input-bordered' />
+                  </div>
+                  <div className='form-control'>
+                    <label className='label'>
+                      <span className='label-text'>New Password</span>
+                    </label>
+                    <input type='password' className='input input-bordered' />
+                  </div>
+                  <div className='form-control'>
+                    <label className='label'>
+                      <span className='label-text'>Confirm New Password</span>
+                    </label>
+                    <input type='password' className='input input-bordered' />
+                  </div>
+                  <div className='form-control mt-6'>
+                    <button className='btn btn-primary'>Change Password</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
