@@ -53,11 +53,14 @@ function Dashboard() {
       <h1 className='text-2xl font-bold mb-6'>Dashboard</h1>
 
       {user && (
-        <div className='mb-6 p-4 bg-blue-50 rounded-lg'>
-          <h2 className='text-xl font-semibold mb-2'>
-            Welcome, {user.firstName}!
-          </h2>
-          <p>Your email: {user.email}</p>
+        <div className='stats shadow'>
+          <div className='stat'>
+            <div className='stat-title'>Welcome back!</div>
+            <div className='stat-value'>
+              {user.firstName + ' ' + user.lastName}
+            </div>
+            <div className='stat-desc'>{user.email}</div>
+          </div>
         </div>
       )}
 
