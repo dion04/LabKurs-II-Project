@@ -1,4 +1,3 @@
-// filepath: server/services/userService.js
 const userRepository = require('../repositories/userRepository')
 
 exports.getProfile = async (userId) => {

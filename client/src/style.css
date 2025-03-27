@@ -1,4 +1,10 @@
 @import 'tailwindcss';
-@plugin "daisyui"{
-    themes: light, dark, corporate, business, forest;
+@plugin "daisyui" {
+  themes:
+    light,
+    dark,
+    corporate --default,
+    business,
+    forest,
+    luxury;
 }

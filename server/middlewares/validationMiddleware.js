@@ -16,7 +16,6 @@ exports.validate = (validations) => {
   }
 }
 
-// Common validation rules
 exports.userValidationRules = {
   register: [
     body('firstName').trim().notEmpty().withMessage('First name is required'),

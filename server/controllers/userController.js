@@ -43,7 +43,6 @@ exports.updateProfile = async (req, res, next) => {
 
       userData = uploadResult.fields
 
-      // Convert formidable field objects to simple values
       Object.keys(userData).forEach((key) => {
         if (
           userData[key] &&
@@ -54,8 +53,6 @@ exports.updateProfile = async (req, res, next) => {
         }
       })
 
-      // Add profile image URL if file was uploaded
-      // Use the Location property and also the url property we added as a fallback
       userData.profileImageUrl = uploadResult.Location || uploadResult.url
     } else {
       userData = req.body

@@ -51,7 +51,6 @@ export function AuthProvider({ children }) {
   const register = async (userData) => {
     try {
       setLoading(true)
-      // Check if userData is FormData (contains file)
       const isFormData = userData instanceof FormData
 
       const headers = isFormData

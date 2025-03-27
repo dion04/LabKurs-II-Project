@@ -6,23 +6,67 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { errorHandler } = require('./middlewares/errorMiddleware')
 const routes = require('./routes')
-const fileparser = require('./utils/fileParser')
-// Initialize Express app
+const openApiSpec = require('./openapi')
+const swaggerUi = require('swagger-ui-express')
+const redoc = require('redoc-express')
+
 const app = express()
 
-// Load middleware
-app.use(helmet())
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          'unpkg.com',
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+          'blob:'
+        ],
+        styleSrc: ["'self'", 'unpkg.com', "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'unpkg.com'],
+        connectSrc: ["'self'"],
+        fontSrc: ["'self'", 'unpkg.com', 'data:'],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'"],
+        frameSrc: ["'self'"],
+        workerSrc: ["'self'", 'blob:'] // Add this line for worker scripts
+      }
+    }
+  })
+)
 app.use(cors({ origin: ['http://localhost:5173'] }))
 app.use(express.json())
 app.use(morgan('dev'))
 
-// API routes
 app.use('/api', routes)
 
-// Error handling middleware
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiSpec))
+
+app.use(
+  '/docs',
+  redoc({
+    title: "API Documentation - The People's Voice",
+    specUrl: '/api-spec',
+    redocOptions: {
+      theme: {
+        colors: {
+          primary: {
+            main: '#0058B5'
+          }
+        }
+      }
+    }
+  })
+)
+
+app.get('/api-spec', (req, res) => {
+  res.json(openApiSpec)
+})
+
 app.use(errorHandler)
 
-// Start server
 const port = process.env.PORT || 8080
 const envName = chalk.greenBright(process.env.APP_ENV)
 const dbName = chalk.greenBright(process.env.PGDATABASE)
@@ -30,9 +74,13 @@ const url = chalk.blueBright(`http://localhost:${port}/`)
 
 const server = app.listen(port, () => {
   console.log(`Listening on ${url} (env: ${envName}, db: ${dbName})`)
+  console.log(
+    `API Documentation available at ${chalk.blueBright(
+      `http://localhost:${port}/docs`
+    )}`
+  )
 })
 
-// Graceful shutdown
 process.once('SIGTERM', () => {
   console.log('SIGTERM received. Shutting down gracefully...')
   server.close(() => {

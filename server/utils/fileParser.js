@@ -42,7 +42,6 @@ const parsefile = async (req) => {
         return
       }
 
-      // Store all form fields
       formFields = fields
       console.log(
         'Raw formFields from parser:',
@@ -54,13 +53,11 @@ const parsefile = async (req) => {
       reject(error.message)
     })
 
-    // Add this in the form.on('data') handler:
     form.on('data', (data) => {
       if (data.name === 'complete') {
-        // Ensure we have a clear url property in the response
         const response = {
           ...data.value,
-          url: data.value.Location, // Add url property for easier access
+          url: data.value.Location,
           fields: formFields
         }
         resolve(response)
