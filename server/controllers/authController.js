@@ -81,7 +81,6 @@ exports.register = async (req, res, next) => {
       const uploadResult = await fileParser(req)
       profileImageUrl = uploadResult.Location
 
-      // Extract form fields from the upload result
       userData = uploadResult.fields
 
       console.log(
@@ -89,9 +88,7 @@ exports.register = async (req, res, next) => {
         JSON.stringify(uploadResult.fields, null, 2)
       )
 
-      // Convert formidable field objects to simple values
       Object.keys(userData).forEach((key) => {
-        // Handle both formats: object with 'value' property and plain string
         if (userData[key] && typeof userData[key] === 'object') {
           if ('value' in userData[key]) {
             userData[key] = userData[key].value.toString().trim()
@@ -102,7 +99,6 @@ exports.register = async (req, res, next) => {
         console.log(`Field ${key}:`, userData[key])
       })
 
-      // Validate the data after parsing
       const validationErrors = validateMultipartData(userData)
       if (validationErrors.length > 0) {
         return res.status(400).json({

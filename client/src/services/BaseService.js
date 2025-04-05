@@ -1,8 +1,7 @@
-import { AxiosInstance } from 'axios'
 import client from '../utils/axios.utils'
 
 class BaseService {
-  protected client: AxiosInstance
+  client
 
   constructor() {
     this.client = client

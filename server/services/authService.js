@@ -26,7 +26,6 @@ exports.register = async (userData) => {
   return { user, token }
 }
 
-// Update the login function to return more user data
 exports.login = async (email, password) => {
   const user = await userRepository.findByEmail(email)
   if (!user) {

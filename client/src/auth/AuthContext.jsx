@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect, useContext } from 'react'
 import axios from 'axios'
+import { useMutation } from '@tanstack/react-query'
+import authService from '../services/AuthService'
 
 const AuthContext = createContext(null)
 
@@ -30,18 +32,20 @@ export function AuthProvider({ children }) {
       setLoading(true)
       const response = await axios.post(
         'http://localhost:8080/api/auth/login',
-        {
-          email,
-          password
-        }
+        { email, password }
       )
-      setToken(response.data.token)
-      setUser(response.data.data.user)
-      return { success: true }
+
+      if (response.data.success) {
+        setToken(response.data.token)
+        setUser(response.data.data.user)
+        return { success: true }
+      } else {
+        return { success: false, error: 'Login failed' }
+      }
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.error || 'Login failed'
+        error: error.response?.data?.message || 'Login failed'
       }
     } finally {
       setLoading(false)
@@ -51,12 +55,11 @@ export function AuthProvider({ children }) {
   const register = async (userData) => {
     try {
       setLoading(true)
-      // Check if userData is FormData (contains file)
-      const isFormData = userData instanceof FormData
 
-      const headers = isFormData
-        ? { 'Content-Type': 'multipart/form-data' }
-        : { 'Content-Type': 'application/json' }
+      const isFormData = userData instanceof FormData
+      const headers = {
+        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
+      }
 
       const response = await axios.post(
         'http://localhost:8080/api/auth/register',
@@ -64,13 +67,17 @@ export function AuthProvider({ children }) {
         { headers }
       )
 
-      setToken(response.data.token)
-      setUser(response.data.data.user)
-      return { success: true }
+      if (response.data.success) {
+        setToken(response.data.token)
+        setUser(response.data.data.user)
+        return { success: true }
+      } else {
+        return { success: false, error: 'Registration failed' }
+      }
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.error || 'Registration failed'
+        error: error.response?.data?.message || 'Registration failed'
       }
     } finally {
       setLoading(false)
@@ -97,7 +104,7 @@ export function AuthProvider({ children }) {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.error || 'Profile update failed'
+        error: error.response?.data?.message || 'Profile update failed'
       }
     }
   }
