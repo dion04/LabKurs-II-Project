@@ -2,9 +2,18 @@ import { useEffect } from 'react'
 import { useAuth } from '../auth/AuthContext'
 import { themeChange } from 'theme-change'
 import ThemeSelector from '../components/ThemeSelector'
+import { useNavigate } from '@tanstack/react-router'
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  console.log(user)
+
+  const handleLogout = () => {
+    logout()
+    navigate({ to: '/landing' })
+  }
 
   useEffect(() => {
     themeChange(false)
@@ -23,39 +32,53 @@ const Navbar = () => {
           className='input input-bordered w-full max-w-md'
         />
 
-        <div className='dropdown dropdown-end'>
-          <div
-            tabIndex={0}
-            role='button'
-            className='btn btn-ghost btn-circle avatar'
-          >
-            <div className='w-10 rounded-full'>
-              <img
-                alt='User Avatar'
-                src={
-                  user?.profileImageUrl || 'https://placeimg.com/80/80/people'
-                }
-              />
+        {user && (
+          <div className='dropdown dropdown-end'>
+            <div
+              tabIndex={0}
+              role='button'
+              className='btn btn-ghost btn-circle avatar'
+            >
+              <div className='w-10 rounded-full'>
+                <img
+                  alt='User Avatar'
+                  src={
+                    user?.profileImageUrl ||
+                    'https://static.vecteezy.com/system/resources/previews/036/594/092/non_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg'
+                  }
+                />
+              </div>
             </div>
+            <ul
+              tabIndex={0}
+              className='menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow'
+            >
+              <li>
+                <a className='justify-between'>
+                  Profile
+                  <span className='badge'>New</span>
+                </a>
+              </li>
+              <li>
+                <a>Settings</a>
+              </li>
+              <li>
+                <a onClick={handleLogout}>Logout</a>
+              </li>
+            </ul>
           </div>
-          <ul
-            tabIndex={0}
-            className='menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow'
-          >
-            <li>
-              <a className='justify-between'>
-                Profile
-                <span className='badge'>New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a onClick={logout}>Logout</a>
-            </li>
-          </ul>
-        </div>
+        )}
+
+        {!isAuthenticated && (
+          <div className='flex gap-2'>
+            <a href='/login' className='btn btn-primary'>
+              Login
+            </a>
+            <a href='/register' className='btn btn-secondary'>
+              Register
+            </a>
+          </div>
+        )}
 
         <ThemeSelector />
       </div>

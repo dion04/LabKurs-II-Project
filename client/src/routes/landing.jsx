@@ -1,15 +1,23 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useAuth } from '../auth/AuthContext'
 import {
   NewspaperIcon,
   GlobeAltIcon,
   MicrophoneIcon
 } from '@heroicons/react/24/outline'
 
-export const Route = createFileRoute('/')({
-  component: Index
+export const Route = createFileRoute('/landing')({
+  component: RouteComponent
 })
 
-function Index() {
+function RouteComponent() {
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  if (isAuthenticated) {
+    navigate({ to: '/' })
+    return null
+  }
+
   const images = [
     {
       src: 'https://images.unsplash.com/photo-1503424886307-b090341d25d1',
