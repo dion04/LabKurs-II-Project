@@ -16,6 +16,16 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LandingImport } from './routes/landing'
 import { Route as mainLayoutImport } from './routes/(main)/_layout'
 import { Route as mainLayoutIndexImport } from './routes/(main)/_layout/index'
+import { Route as mainLayoutTimelineImport } from './routes/(main)/_layout/timeline'
+import { Route as mainLayoutSettingsImport } from './routes/(main)/_layout/settings'
+import { Route as mainLayoutSearchImport } from './routes/(main)/_layout/search'
+import { Route as mainLayoutReportsImport } from './routes/(main)/_layout/reports'
+import { Route as mainLayoutNewsroomImport } from './routes/(main)/_layout/newsroom'
+import { Route as mainLayoutHelpImport } from './routes/(main)/_layout/help'
+import { Route as mainLayoutCommunityChatImport } from './routes/(main)/_layout/community-chat'
+import { Route as mainLayoutAssistantImport } from './routes/(main)/_layout/assistant'
+import { Route as mainLayoutArchiveImport } from './routes/(main)/_layout/archive'
+import { Route as mainLayoutAnalyticsImport } from './routes/(main)/_layout/analytics'
 
 // Create Virtual Routes
 
@@ -45,6 +55,66 @@ const mainLayoutIndexRoute = mainLayoutIndexImport.update({
   getParentRoute: () => mainLayoutRoute,
 } as any)
 
+const mainLayoutTimelineRoute = mainLayoutTimelineImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutSettingsRoute = mainLayoutSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutSearchRoute = mainLayoutSearchImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutReportsRoute = mainLayoutReportsImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutNewsroomRoute = mainLayoutNewsroomImport.update({
+  id: '/newsroom',
+  path: '/newsroom',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutHelpRoute = mainLayoutHelpImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutCommunityChatRoute = mainLayoutCommunityChatImport.update({
+  id: '/community-chat',
+  path: '/community-chat',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutAssistantRoute = mainLayoutAssistantImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutArchiveRoute = mainLayoutArchiveImport.update({
+  id: '/archive',
+  path: '/archive',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutAnalyticsRoute = mainLayoutAnalyticsImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -70,6 +140,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof mainLayoutImport
       parentRoute: typeof mainRoute
     }
+    '/(main)/_layout/analytics': {
+      id: '/(main)/_layout/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof mainLayoutAnalyticsImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/archive': {
+      id: '/(main)/_layout/archive'
+      path: '/archive'
+      fullPath: '/archive'
+      preLoaderRoute: typeof mainLayoutArchiveImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/assistant': {
+      id: '/(main)/_layout/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof mainLayoutAssistantImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/community-chat': {
+      id: '/(main)/_layout/community-chat'
+      path: '/community-chat'
+      fullPath: '/community-chat'
+      preLoaderRoute: typeof mainLayoutCommunityChatImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/help': {
+      id: '/(main)/_layout/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof mainLayoutHelpImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/newsroom': {
+      id: '/(main)/_layout/newsroom'
+      path: '/newsroom'
+      fullPath: '/newsroom'
+      preLoaderRoute: typeof mainLayoutNewsroomImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/reports': {
+      id: '/(main)/_layout/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof mainLayoutReportsImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/search': {
+      id: '/(main)/_layout/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof mainLayoutSearchImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/settings': {
+      id: '/(main)/_layout/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof mainLayoutSettingsImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/timeline': {
+      id: '/(main)/_layout/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof mainLayoutTimelineImport
+      parentRoute: typeof mainLayoutImport
+    }
     '/(main)/_layout/': {
       id: '/(main)/_layout/'
       path: '/'
@@ -83,10 +223,30 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface mainLayoutRouteChildren {
+  mainLayoutAnalyticsRoute: typeof mainLayoutAnalyticsRoute
+  mainLayoutArchiveRoute: typeof mainLayoutArchiveRoute
+  mainLayoutAssistantRoute: typeof mainLayoutAssistantRoute
+  mainLayoutCommunityChatRoute: typeof mainLayoutCommunityChatRoute
+  mainLayoutHelpRoute: typeof mainLayoutHelpRoute
+  mainLayoutNewsroomRoute: typeof mainLayoutNewsroomRoute
+  mainLayoutReportsRoute: typeof mainLayoutReportsRoute
+  mainLayoutSearchRoute: typeof mainLayoutSearchRoute
+  mainLayoutSettingsRoute: typeof mainLayoutSettingsRoute
+  mainLayoutTimelineRoute: typeof mainLayoutTimelineRoute
   mainLayoutIndexRoute: typeof mainLayoutIndexRoute
 }
 
 const mainLayoutRouteChildren: mainLayoutRouteChildren = {
+  mainLayoutAnalyticsRoute: mainLayoutAnalyticsRoute,
+  mainLayoutArchiveRoute: mainLayoutArchiveRoute,
+  mainLayoutAssistantRoute: mainLayoutAssistantRoute,
+  mainLayoutCommunityChatRoute: mainLayoutCommunityChatRoute,
+  mainLayoutHelpRoute: mainLayoutHelpRoute,
+  mainLayoutNewsroomRoute: mainLayoutNewsroomRoute,
+  mainLayoutReportsRoute: mainLayoutReportsRoute,
+  mainLayoutSearchRoute: mainLayoutSearchRoute,
+  mainLayoutSettingsRoute: mainLayoutSettingsRoute,
+  mainLayoutTimelineRoute: mainLayoutTimelineRoute,
   mainLayoutIndexRoute: mainLayoutIndexRoute,
 }
 
@@ -107,10 +267,30 @@ const mainRouteWithChildren = mainRoute._addFileChildren(mainRouteChildren)
 export interface FileRoutesByFullPath {
   '/landing': typeof LandingRoute
   '/': typeof mainLayoutIndexRoute
+  '/analytics': typeof mainLayoutAnalyticsRoute
+  '/archive': typeof mainLayoutArchiveRoute
+  '/assistant': typeof mainLayoutAssistantRoute
+  '/community-chat': typeof mainLayoutCommunityChatRoute
+  '/help': typeof mainLayoutHelpRoute
+  '/newsroom': typeof mainLayoutNewsroomRoute
+  '/reports': typeof mainLayoutReportsRoute
+  '/search': typeof mainLayoutSearchRoute
+  '/settings': typeof mainLayoutSettingsRoute
+  '/timeline': typeof mainLayoutTimelineRoute
 }
 
 export interface FileRoutesByTo {
   '/landing': typeof LandingRoute
+  '/analytics': typeof mainLayoutAnalyticsRoute
+  '/archive': typeof mainLayoutArchiveRoute
+  '/assistant': typeof mainLayoutAssistantRoute
+  '/community-chat': typeof mainLayoutCommunityChatRoute
+  '/help': typeof mainLayoutHelpRoute
+  '/newsroom': typeof mainLayoutNewsroomRoute
+  '/reports': typeof mainLayoutReportsRoute
+  '/search': typeof mainLayoutSearchRoute
+  '/settings': typeof mainLayoutSettingsRoute
+  '/timeline': typeof mainLayoutTimelineRoute
   '/': typeof mainLayoutIndexRoute
 }
 
@@ -119,19 +299,63 @@ export interface FileRoutesById {
   '/landing': typeof LandingRoute
   '/(main)': typeof mainRouteWithChildren
   '/(main)/_layout': typeof mainLayoutRouteWithChildren
+  '/(main)/_layout/analytics': typeof mainLayoutAnalyticsRoute
+  '/(main)/_layout/archive': typeof mainLayoutArchiveRoute
+  '/(main)/_layout/assistant': typeof mainLayoutAssistantRoute
+  '/(main)/_layout/community-chat': typeof mainLayoutCommunityChatRoute
+  '/(main)/_layout/help': typeof mainLayoutHelpRoute
+  '/(main)/_layout/newsroom': typeof mainLayoutNewsroomRoute
+  '/(main)/_layout/reports': typeof mainLayoutReportsRoute
+  '/(main)/_layout/search': typeof mainLayoutSearchRoute
+  '/(main)/_layout/settings': typeof mainLayoutSettingsRoute
+  '/(main)/_layout/timeline': typeof mainLayoutTimelineRoute
   '/(main)/_layout/': typeof mainLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/landing' | '/'
+  fullPaths:
+    | '/landing'
+    | '/'
+    | '/analytics'
+    | '/archive'
+    | '/assistant'
+    | '/community-chat'
+    | '/help'
+    | '/newsroom'
+    | '/reports'
+    | '/search'
+    | '/settings'
+    | '/timeline'
   fileRoutesByTo: FileRoutesByTo
-  to: '/landing' | '/'
+  to:
+    | '/landing'
+    | '/analytics'
+    | '/archive'
+    | '/assistant'
+    | '/community-chat'
+    | '/help'
+    | '/newsroom'
+    | '/reports'
+    | '/search'
+    | '/settings'
+    | '/timeline'
+    | '/'
   id:
     | '__root__'
     | '/landing'
     | '/(main)'
     | '/(main)/_layout'
+    | '/(main)/_layout/analytics'
+    | '/(main)/_layout/archive'
+    | '/(main)/_layout/assistant'
+    | '/(main)/_layout/community-chat'
+    | '/(main)/_layout/help'
+    | '/(main)/_layout/newsroom'
+    | '/(main)/_layout/reports'
+    | '/(main)/_layout/search'
+    | '/(main)/_layout/settings'
+    | '/(main)/_layout/timeline'
     | '/(main)/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -173,8 +397,58 @@ export const routeTree = rootRoute
       "filePath": "(main)/_layout.tsx",
       "parent": "/(main)",
       "children": [
+        "/(main)/_layout/analytics",
+        "/(main)/_layout/archive",
+        "/(main)/_layout/assistant",
+        "/(main)/_layout/community-chat",
+        "/(main)/_layout/help",
+        "/(main)/_layout/newsroom",
+        "/(main)/_layout/reports",
+        "/(main)/_layout/search",
+        "/(main)/_layout/settings",
+        "/(main)/_layout/timeline",
         "/(main)/_layout/"
       ]
+    },
+    "/(main)/_layout/analytics": {
+      "filePath": "(main)/_layout/analytics.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/archive": {
+      "filePath": "(main)/_layout/archive.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/assistant": {
+      "filePath": "(main)/_layout/assistant.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/community-chat": {
+      "filePath": "(main)/_layout/community-chat.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/help": {
+      "filePath": "(main)/_layout/help.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/newsroom": {
+      "filePath": "(main)/_layout/newsroom.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/reports": {
+      "filePath": "(main)/_layout/reports.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/search": {
+      "filePath": "(main)/_layout/search.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/settings": {
+      "filePath": "(main)/_layout/settings.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/timeline": {
+      "filePath": "(main)/_layout/timeline.tsx",
+      "parent": "/(main)/_layout"
     },
     "/(main)/_layout/": {
       "filePath": "(main)/_layout/index.tsx",

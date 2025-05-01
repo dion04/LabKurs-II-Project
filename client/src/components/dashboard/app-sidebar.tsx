@@ -39,10 +39,10 @@ const data = {
     avatar: '/avatars/shadcn.jpg'
   },
   navMain: [
-    { title: 'Timeline', url: '#', icon: IconTimeline },
-    { title: 'Analytics', url: '#', icon: IconChartPie },
-    { title: 'Newsroom', url: '#', icon: IconNews },
-    { title: 'Community Chat', url: '#', icon: IconMessageCircle }
+    { title: 'Timeline', url: '/timeline', icon: IconTimeline },
+    { title: 'Analytics', url: '/analytics', icon: IconChartPie },
+    { title: 'Newsroom', url: '/newsroom', icon: IconNews },
+    { title: 'Community Chat', url: '/community-chat', icon: IconMessageCircle }
   ],
   navClouds: [
     {
@@ -75,14 +75,14 @@ const data = {
     }
   ],
   navSecondary: [
-    { title: 'Settings', url: '#', icon: IconSettings },
-    { title: 'Get Help', url: '#', icon: IconQuestionMark },
-    { title: 'Search', url: '#', icon: IconSearch }
+    { title: 'Settings', url: '/settings', icon: IconSettings },
+    { title: 'Get Help', url: '/help', icon: IconQuestionMark },
+    { title: 'Search', url: '/search', icon: IconSearch }
   ],
   documents: [
-    { name: 'Archive', url: '#', icon: IconArchive },
-    { name: 'Published Reports', url: '#', icon: IconArticle },
-    { name: 'Chat Assistant', url: '#', icon: IconMessage }
+    { name: 'Archive', url: '/archive', icon: IconArchive },
+    { name: 'Published Reports', url: '/reports', icon: IconArticle },
+    { name: 'Chat Assistant', url: '/assistant', icon: IconMessage }
   ]
 }
 
