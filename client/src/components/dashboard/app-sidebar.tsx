@@ -1,20 +1,21 @@
 import * as React from 'react'
 import {
   IconCamera,
-  IconChartBar,
+  IconChartPie,
   IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
+  IconPhotoPlus,
+  IconWriting,
+  IconBulb,
+  IconNews,
+  IconMessageCircle,
+  IconTimeline,
+  IconArchive,
+  IconArticle,
+  IconMessage,
+  IconQuestionMark,
   IconSearch,
   IconSettings,
-  IconUsers
+  IconInnerShadowTop
 } from '@tabler/icons-react'
 
 import { NavDocuments } from '@/components/dashboard/nav-documents'
@@ -38,113 +39,50 @@ const data = {
     avatar: '/avatars/shadcn.jpg'
   },
   navMain: [
-    {
-      title: 'Dashboard',
-      url: '#',
-      icon: IconDashboard
-    },
-    {
-      title: 'Lifecycle',
-      url: '#',
-      icon: IconListDetails
-    },
-    {
-      title: 'Analytics',
-      url: '#',
-      icon: IconChartBar
-    },
-    {
-      title: 'Projects',
-      url: '#',
-      icon: IconFolder
-    },
-    {
-      title: 'Team',
-      url: '#',
-      icon: IconUsers
-    }
+    { title: 'Timeline', url: '#', icon: IconTimeline },
+    { title: 'Analytics', url: '#', icon: IconChartPie },
+    { title: 'Newsroom', url: '#', icon: IconNews },
+    { title: 'Community Chat', url: '#', icon: IconMessageCircle }
   ],
   navClouds: [
     {
-      title: 'Capture',
-      icon: IconCamera,
+      title: 'Submissions',
+      icon: IconPhotoPlus,
       isActive: true,
       url: '#',
       items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
+        { title: 'Active', url: '#' },
+        { title: 'Archived', url: '#' }
       ]
     },
     {
-      title: 'Proposal',
-      icon: IconFileDescription,
+      title: 'Drafts',
+      icon: IconWriting,
       url: '#',
       items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
+        { title: 'Active', url: '#' },
+        { title: 'Archived', url: '#' }
       ]
     },
     {
-      title: 'Prompts',
-      icon: IconFileAi,
+      title: 'Story Ideas',
+      icon: IconBulb,
       url: '#',
       items: [
-        {
-          title: 'Active Proposals',
-          url: '#'
-        },
-        {
-          title: 'Archived',
-          url: '#'
-        }
+        { title: 'Suggested', url: '#' },
+        { title: 'Archived', url: '#' }
       ]
     }
   ],
   navSecondary: [
-    {
-      title: 'Settings',
-      url: '#',
-      icon: IconSettings
-    },
-    {
-      title: 'Get Help',
-      url: '#',
-      icon: IconHelp
-    },
-    {
-      title: 'Search',
-      url: '#',
-      icon: IconSearch
-    }
+    { title: 'Settings', url: '#', icon: IconSettings },
+    { title: 'Get Help', url: '#', icon: IconQuestionMark },
+    { title: 'Search', url: '#', icon: IconSearch }
   ],
   documents: [
-    {
-      name: 'Data Library',
-      url: '#',
-      icon: IconDatabase
-    },
-    {
-      name: 'Reports',
-      url: '#',
-      icon: IconReport
-    },
-    {
-      name: 'Word Assistant',
-      url: '#',
-      icon: IconFileWord
-    }
+    { name: 'Archive', url: '#', icon: IconArchive },
+    { name: 'Published Reports', url: '#', icon: IconArticle },
+    { name: 'Chat Assistant', url: '#', icon: IconMessage }
   ]
 }
 

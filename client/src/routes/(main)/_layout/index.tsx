@@ -1,5 +1,4 @@
-import { SignedIn, SignedOut } from '@clerk/clerk-react'
-import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(main)/_layout/')({
   component: RouteComponent
@@ -8,12 +7,7 @@ export const Route = createFileRoute('/(main)/_layout/')({
 function RouteComponent() {
   return (
     <>
-      <SignedIn>
-        <div>Hello "/(main)/_layout/"!</div>
-      </SignedIn>
-      <SignedOut>
-        <Navigate to='/landing' />
-      </SignedOut>
+      <div>Hello "/(main)/_layout/"!</div>
     </>
   )
 }

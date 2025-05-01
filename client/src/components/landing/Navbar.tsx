@@ -17,6 +17,7 @@ import { buttonVariants } from '../ui/button'
 import { Menu } from 'lucide-react'
 import { ModeToggle } from './mode-toggle'
 import { LogoIcon } from './Icons'
+import { SignInButton } from '@clerk/clerk-react'
 
 interface RouteProps {
   href: string
@@ -102,6 +103,15 @@ export const Navbar = () => {
                     <InstagramLogoIcon className='mr-2 w-5 h-5' />
                     Instagram
                   </a>
+                  <a
+                    rel='noreferrer noopener'
+                    href='/signin'
+                    className={`w-[110px] ${buttonVariants({
+                      variant: 'primary'
+                    })}`}
+                  >
+                    Sign In
+                  </a>
                 </nav>
               </SheetContent>
             </Sheet>
@@ -123,15 +133,13 @@ export const Navbar = () => {
             ))}
           </nav>
 
-          <div className='hidden md:flex gap-2'>
+          <div className='hidden md:flex gap-2 cursor-pointer'>
             <a
-              rel='noreferrer noopener'
-              href='https://github.com/leoMirandaa/shadcn-landing-page.git'
-              target='_blank'
-              className={`border ${buttonVariants({ variant: 'secondary' })}`}
+              className={`border ${buttonVariants({ variant: 'primary' })} cursor-pointer`}
             >
-              <InstagramLogoIcon className='mr-2 w-5 h-5' />
-              Instagram
+              <SignInButton>
+                <p className='cursor-pointer'>Sign In</p>
+              </SignInButton>
             </a>
           </div>
         </NavigationMenuList>
