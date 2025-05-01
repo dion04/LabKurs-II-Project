@@ -8,63 +8,142 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as LandingImport } from './routes/landing'
+import { Route as mainLayoutImport } from './routes/(main)/_layout'
+import { Route as mainLayoutIndexImport } from './routes/(main)/_layout/index'
+
+// Create Virtual Routes
+
+const mainImport = createFileRoute('/(main)')()
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
+const mainRoute = mainImport.update({
+  id: '/(main)',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LandingRoute = LandingImport.update({
+  id: '/landing',
+  path: '/landing',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const mainLayoutRoute = mainLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => mainRoute,
+} as any)
+
+const mainLayoutIndexRoute = mainLayoutIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => mainLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingImport
+      parentRoute: typeof rootRoute
+    }
+    '/(main)': {
+      id: '/(main)'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof mainImport
       parentRoute: typeof rootRoute
+    }
+    '/(main)/_layout': {
+      id: '/(main)/_layout'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof mainLayoutImport
+      parentRoute: typeof mainRoute
+    }
+    '/(main)/_layout/': {
+      id: '/(main)/_layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof mainLayoutIndexImport
+      parentRoute: typeof mainLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface mainLayoutRouteChildren {
+  mainLayoutIndexRoute: typeof mainLayoutIndexRoute
+}
+
+const mainLayoutRouteChildren: mainLayoutRouteChildren = {
+  mainLayoutIndexRoute: mainLayoutIndexRoute,
+}
+
+const mainLayoutRouteWithChildren = mainLayoutRoute._addFileChildren(
+  mainLayoutRouteChildren,
+)
+
+interface mainRouteChildren {
+  mainLayoutRoute: typeof mainLayoutRouteWithChildren
+}
+
+const mainRouteChildren: mainRouteChildren = {
+  mainLayoutRoute: mainLayoutRouteWithChildren,
+}
+
+const mainRouteWithChildren = mainRoute._addFileChildren(mainRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/landing': typeof LandingRoute
+  '/': typeof mainLayoutIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/landing': typeof LandingRoute
+  '/': typeof mainLayoutIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/landing': typeof LandingRoute
+  '/(main)': typeof mainRouteWithChildren
+  '/(main)/_layout': typeof mainLayoutRouteWithChildren
+  '/(main)/_layout/': typeof mainLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/landing' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/landing' | '/'
+  id:
+    | '__root__'
+    | '/landing'
+    | '/(main)'
+    | '/(main)/_layout'
+    | '/(main)/_layout/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  LandingRoute: typeof LandingRoute
+  mainRoute: typeof mainRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  LandingRoute: LandingRoute,
+  mainRoute: mainRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -75,13 +154,31 @@ export const routeTree = rootRoute
 {
   "routes": {
     "__root__": {
-      "filePath": "__root.jsx",
+      "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/landing",
+        "/(main)"
       ]
     },
-    "/": {
-      "filePath": "index.jsx"
+    "/landing": {
+      "filePath": "landing.tsx"
+    },
+    "/(main)": {
+      "filePath": "(main)",
+      "children": [
+        "/(main)/_layout"
+      ]
+    },
+    "/(main)/_layout": {
+      "filePath": "(main)/_layout.tsx",
+      "parent": "/(main)",
+      "children": [
+        "/(main)/_layout/"
+      ]
+    },
+    "/(main)/_layout/": {
+      "filePath": "(main)/_layout/index.tsx",
+      "parent": "/(main)/_layout"
     }
   }
 }
