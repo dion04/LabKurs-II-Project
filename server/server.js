@@ -9,41 +9,32 @@ const routes = require('./routes')
 const openApiSpec = require('./openapi')
 const swaggerUi = require('swagger-ui-express')
 const redoc = require('redoc-express')
+const articleRoutes = require('./routes/articles');
 
 const app = express()
 
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: [
-          "'self'",
-          'unpkg.com',
-          "'unsafe-inline'",
-          "'unsafe-eval'",
-          'blob:'
-        ],
-        styleSrc: ["'self'", 'unpkg.com', "'unsafe-inline'"],
-        imgSrc: ["'self'", 'data:', 'unpkg.com'],
-        connectSrc: ["'self'"],
-        fontSrc: ["'self'", 'unpkg.com', 'data:'],
-        objectSrc: ["'none'"],
-        mediaSrc: ["'self'"],
-        frameSrc: ["'self'"],
-        workerSrc: ["'self'", 'blob:'] // Add this line for worker scripts
-      }
-    }
-  })
-)
-app.use(cors({ origin: ['http://localhost:5173'] }))
-app.use(express.json())
-app.use(morgan('dev'))
+// Middleware
+app.use(cors({
+  origin: ['http://localhost:5173'], // Allow React dev server
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
+}))
 
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}))
+
+app.use(morgan('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+// Routes
+app.use('/api/articles', articleRoutes);
 app.use('/api', routes)
 
+// API Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiSpec))
-
 app.use(
   '/docs',
   redoc({
@@ -65,6 +56,7 @@ app.get('/api-spec', (req, res) => {
   res.json(openApiSpec)
 })
 
+// Error handling
 app.use(errorHandler)
 
 const port = process.env.PORT || 8080

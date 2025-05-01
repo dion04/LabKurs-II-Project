@@ -11,9 +11,23 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as StoriesImport } from './routes/stories'
+import { Route as AdminpageImport } from './routes/adminpage'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const StoriesRoute = StoriesImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminpageRoute = AdminpageImport.update({
+  id: '/adminpage',
+  path: '/adminpage',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -32,6 +46,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/adminpage': {
+      id: '/adminpage'
+      path: '/adminpage'
+      fullPath: '/adminpage'
+      preLoaderRoute: typeof AdminpageImport
+      parentRoute: typeof rootRoute
+    }
+    '/stories': {
+      id: '/stories'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof StoriesImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/adminpage': typeof AdminpageRoute
+  '/stories': typeof StoriesRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/adminpage': typeof AdminpageRoute
+  '/stories': typeof StoriesRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/adminpage': typeof AdminpageRoute
+  '/stories': typeof StoriesRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/adminpage' | '/stories'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/adminpage' | '/stories'
+  id: '__root__' | '/' | '/adminpage' | '/stories'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminpageRoute: typeof AdminpageRoute
+  StoriesRoute: typeof StoriesRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminpageRoute: AdminpageRoute,
+  StoriesRoute: StoriesRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +115,19 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.jsx",
       "children": [
-        "/"
+        "/",
+        "/adminpage",
+        "/stories"
       ]
     },
     "/": {
       "filePath": "index.jsx"
+    },
+    "/adminpage": {
+      "filePath": "adminpage.jsx"
+    },
+    "/stories": {
+      "filePath": "stories.jsx"
     }
   }
 }

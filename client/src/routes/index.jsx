@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
   NewspaperIcon,
   GlobeAltIcon,
@@ -10,6 +10,7 @@ export const Route = createFileRoute('/')({
 })
 
 function Index() {
+  const navigate = useNavigate()
   const images = [
     {
       src: 'https://images.unsplash.com/photo-1503424886307-b090341d25d1',
@@ -32,6 +33,9 @@ function Index() {
       alt: 'Microphone at a press conference'
     }
   ]
+  const handleBrowseStories = () => {
+    navigate({ to: '/stories' })
+  }
 
   return (
     <div className='px-4 py-8 flex flex-col items-center  gap-12'>
@@ -43,8 +47,15 @@ function Index() {
           Independent. Transparent. Global. Your go-to platform for real news.
         </p>
         <div className='flex justify-center gap-4'>
-          <button className='btn btn-primary'>Subscribe Now</button>
-          <button className='btn btn-outline'>Browse Stories</button>
+          <button className='btn btn-primary'>Subscribe Now</button>         
+          <button 
+            className='btn btn-outline'
+            onClick={handleBrowseStories}
+          >
+            Browse Stories
+          </button>
+
+       
         </div>
       </section>
 

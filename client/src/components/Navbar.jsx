@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useAuth } from '../auth/AuthContext'
 import { themeChange } from 'theme-change'
 import ThemeSelector from '../components/ThemeSelector'
-
+import { useNavigate } from '@tanstack/react-router'
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth()
 
@@ -10,9 +10,14 @@ const Navbar = () => {
     themeChange(false)
   }, [])
 
+  const navigate = useNavigate()
+  const handleRedirectHome = () => {
+    navigate ({to: '/' })
+
+  }
   return (
     <div className='fixed top-4 left-1/2 z-50 w-[95%]  -translate-x-1/2 rounded-2xl bg-base-100/90 backdrop-blur shadow-lg px-6 py-3 flex items-center justify-between'>
-      <a className='btn btn-ghost text-xl whitespace-nowrap'>
+      <a onClick={handleRedirectHome} className='btn btn-ghost text-xl whitespace-nowrap'>
         The People's Voice
       </a>
 
