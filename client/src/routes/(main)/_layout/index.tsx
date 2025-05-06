@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { apiClient } from '@/../api/apiClient'
 import {
   Card,
   CardHeader,
@@ -12,6 +13,9 @@ export const Route = createFileRoute('/(main)/_layout/')({
 })
 
 function RouteComponent() {
+  apiClient.get('/api/assistant').then((response) => {
+    console.log('Assistant data:', response.data)
+  })
   return (
     <div className='space-y-4'>
       <h1 className='text-2xl font-semibold'>Welcome to The People's Voice</h1>
@@ -46,7 +50,7 @@ function RouteComponent() {
             <div className='border-b pb-2'>
               <h3 className='font-medium'>New Farmers Market Opens Downtown</h3>
               <p className='text-sm text-muted-foreground'>
-                Local vendors celebrate the grand opening of an organic farmers
+                Local vendors celebrate the grand opening of an organic farms
                 market.
               </p>
               <div className='flex items-center justify-between mt-2'>

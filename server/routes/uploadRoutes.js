@@ -1,9 +1,10 @@
 const express = require('express')
 const uploadController = require('../controllers/uploadController')
-const { authenticateToken } = require('../middlewares/authMiddleware')
+const { ClerkExpressRequireAuth } = require('@clerk/clerk-sdk-node')
 
 const router = express.Router()
 
-router.post('/', authenticateToken, uploadController.uploadFile)
+// Protect upload routes with Clerk authentication
+router.post('/', ClerkExpressRequireAuth(), uploadController.uploadFile)
 
 module.exports = router

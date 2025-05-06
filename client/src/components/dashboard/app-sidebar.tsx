@@ -15,7 +15,8 @@ import {
   IconQuestionMark,
   IconSearch,
   IconSettings,
-  IconInnerShadowTop
+  IconInnerShadowTop,
+  IconFileText
 } from '@tabler/icons-react'
 
 import { NavDocuments } from '@/components/dashboard/nav-documents'
@@ -40,6 +41,7 @@ const data = {
   },
   navMain: [
     { title: 'Timeline', url: '/timeline', icon: IconTimeline },
+    { title: 'Articles', url: '/articles', icon: IconFileText },
     { title: 'Analytics', url: '/analytics', icon: IconChartPie },
     { title: 'Newsroom', url: '/newsroom', icon: IconNews },
     { title: 'Community Chat', url: '/community-chat', icon: IconMessageCircle }

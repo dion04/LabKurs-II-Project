@@ -26,6 +26,10 @@ import { Route as mainLayoutCommunityChatImport } from './routes/(main)/_layout/
 import { Route as mainLayoutAssistantImport } from './routes/(main)/_layout/assistant'
 import { Route as mainLayoutArchiveImport } from './routes/(main)/_layout/archive'
 import { Route as mainLayoutAnalyticsImport } from './routes/(main)/_layout/analytics'
+import { Route as mainLayoutArticlesIndexImport } from './routes/(main)/_layout/articles/index'
+import { Route as mainLayoutArticlesNewImport } from './routes/(main)/_layout/articles/new'
+import { Route as mainLayoutArticlesArticleIdImport } from './routes/(main)/_layout/articles/$articleId'
+import { Route as mainLayoutArticlesArticleIdEditImport } from './routes/(main)/_layout/articles/$articleId/edit'
 
 // Create Virtual Routes
 
@@ -114,6 +118,32 @@ const mainLayoutAnalyticsRoute = mainLayoutAnalyticsImport.update({
   path: '/analytics',
   getParentRoute: () => mainLayoutRoute,
 } as any)
+
+const mainLayoutArticlesIndexRoute = mainLayoutArticlesIndexImport.update({
+  id: '/articles/',
+  path: '/articles/',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutArticlesNewRoute = mainLayoutArticlesNewImport.update({
+  id: '/articles/new',
+  path: '/articles/new',
+  getParentRoute: () => mainLayoutRoute,
+} as any)
+
+const mainLayoutArticlesArticleIdRoute =
+  mainLayoutArticlesArticleIdImport.update({
+    id: '/articles/$articleId',
+    path: '/articles/$articleId',
+    getParentRoute: () => mainLayoutRoute,
+  } as any)
+
+const mainLayoutArticlesArticleIdEditRoute =
+  mainLayoutArticlesArticleIdEditImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => mainLayoutArticlesArticleIdRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -217,10 +247,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof mainLayoutIndexImport
       parentRoute: typeof mainLayoutImport
     }
+    '/(main)/_layout/articles/$articleId': {
+      id: '/(main)/_layout/articles/$articleId'
+      path: '/articles/$articleId'
+      fullPath: '/articles/$articleId'
+      preLoaderRoute: typeof mainLayoutArticlesArticleIdImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/articles/new': {
+      id: '/(main)/_layout/articles/new'
+      path: '/articles/new'
+      fullPath: '/articles/new'
+      preLoaderRoute: typeof mainLayoutArticlesNewImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/articles/': {
+      id: '/(main)/_layout/articles/'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof mainLayoutArticlesIndexImport
+      parentRoute: typeof mainLayoutImport
+    }
+    '/(main)/_layout/articles/$articleId/edit': {
+      id: '/(main)/_layout/articles/$articleId/edit'
+      path: '/edit'
+      fullPath: '/articles/$articleId/edit'
+      preLoaderRoute: typeof mainLayoutArticlesArticleIdEditImport
+      parentRoute: typeof mainLayoutArticlesArticleIdImport
+    }
   }
 }
 
 // Create and export the route tree
+
+interface mainLayoutArticlesArticleIdRouteChildren {
+  mainLayoutArticlesArticleIdEditRoute: typeof mainLayoutArticlesArticleIdEditRoute
+}
+
+const mainLayoutArticlesArticleIdRouteChildren: mainLayoutArticlesArticleIdRouteChildren =
+  {
+    mainLayoutArticlesArticleIdEditRoute: mainLayoutArticlesArticleIdEditRoute,
+  }
+
+const mainLayoutArticlesArticleIdRouteWithChildren =
+  mainLayoutArticlesArticleIdRoute._addFileChildren(
+    mainLayoutArticlesArticleIdRouteChildren,
+  )
 
 interface mainLayoutRouteChildren {
   mainLayoutAnalyticsRoute: typeof mainLayoutAnalyticsRoute
@@ -234,6 +306,9 @@ interface mainLayoutRouteChildren {
   mainLayoutSettingsRoute: typeof mainLayoutSettingsRoute
   mainLayoutTimelineRoute: typeof mainLayoutTimelineRoute
   mainLayoutIndexRoute: typeof mainLayoutIndexRoute
+  mainLayoutArticlesArticleIdRoute: typeof mainLayoutArticlesArticleIdRouteWithChildren
+  mainLayoutArticlesNewRoute: typeof mainLayoutArticlesNewRoute
+  mainLayoutArticlesIndexRoute: typeof mainLayoutArticlesIndexRoute
 }
 
 const mainLayoutRouteChildren: mainLayoutRouteChildren = {
@@ -248,6 +323,10 @@ const mainLayoutRouteChildren: mainLayoutRouteChildren = {
   mainLayoutSettingsRoute: mainLayoutSettingsRoute,
   mainLayoutTimelineRoute: mainLayoutTimelineRoute,
   mainLayoutIndexRoute: mainLayoutIndexRoute,
+  mainLayoutArticlesArticleIdRoute:
+    mainLayoutArticlesArticleIdRouteWithChildren,
+  mainLayoutArticlesNewRoute: mainLayoutArticlesNewRoute,
+  mainLayoutArticlesIndexRoute: mainLayoutArticlesIndexRoute,
 }
 
 const mainLayoutRouteWithChildren = mainLayoutRoute._addFileChildren(
@@ -277,6 +356,10 @@ export interface FileRoutesByFullPath {
   '/search': typeof mainLayoutSearchRoute
   '/settings': typeof mainLayoutSettingsRoute
   '/timeline': typeof mainLayoutTimelineRoute
+  '/articles/$articleId': typeof mainLayoutArticlesArticleIdRouteWithChildren
+  '/articles/new': typeof mainLayoutArticlesNewRoute
+  '/articles': typeof mainLayoutArticlesIndexRoute
+  '/articles/$articleId/edit': typeof mainLayoutArticlesArticleIdEditRoute
 }
 
 export interface FileRoutesByTo {
@@ -292,6 +375,10 @@ export interface FileRoutesByTo {
   '/settings': typeof mainLayoutSettingsRoute
   '/timeline': typeof mainLayoutTimelineRoute
   '/': typeof mainLayoutIndexRoute
+  '/articles/$articleId': typeof mainLayoutArticlesArticleIdRouteWithChildren
+  '/articles/new': typeof mainLayoutArticlesNewRoute
+  '/articles': typeof mainLayoutArticlesIndexRoute
+  '/articles/$articleId/edit': typeof mainLayoutArticlesArticleIdEditRoute
 }
 
 export interface FileRoutesById {
@@ -310,6 +397,10 @@ export interface FileRoutesById {
   '/(main)/_layout/settings': typeof mainLayoutSettingsRoute
   '/(main)/_layout/timeline': typeof mainLayoutTimelineRoute
   '/(main)/_layout/': typeof mainLayoutIndexRoute
+  '/(main)/_layout/articles/$articleId': typeof mainLayoutArticlesArticleIdRouteWithChildren
+  '/(main)/_layout/articles/new': typeof mainLayoutArticlesNewRoute
+  '/(main)/_layout/articles/': typeof mainLayoutArticlesIndexRoute
+  '/(main)/_layout/articles/$articleId/edit': typeof mainLayoutArticlesArticleIdEditRoute
 }
 
 export interface FileRouteTypes {
@@ -327,6 +418,10 @@ export interface FileRouteTypes {
     | '/search'
     | '/settings'
     | '/timeline'
+    | '/articles/$articleId'
+    | '/articles/new'
+    | '/articles'
+    | '/articles/$articleId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/landing'
@@ -341,6 +436,10 @@ export interface FileRouteTypes {
     | '/settings'
     | '/timeline'
     | '/'
+    | '/articles/$articleId'
+    | '/articles/new'
+    | '/articles'
+    | '/articles/$articleId/edit'
   id:
     | '__root__'
     | '/landing'
@@ -357,6 +456,10 @@ export interface FileRouteTypes {
     | '/(main)/_layout/settings'
     | '/(main)/_layout/timeline'
     | '/(main)/_layout/'
+    | '/(main)/_layout/articles/$articleId'
+    | '/(main)/_layout/articles/new'
+    | '/(main)/_layout/articles/'
+    | '/(main)/_layout/articles/$articleId/edit'
   fileRoutesById: FileRoutesById
 }
 
@@ -407,7 +510,10 @@ export const routeTree = rootRoute
         "/(main)/_layout/search",
         "/(main)/_layout/settings",
         "/(main)/_layout/timeline",
-        "/(main)/_layout/"
+        "/(main)/_layout/",
+        "/(main)/_layout/articles/$articleId",
+        "/(main)/_layout/articles/new",
+        "/(main)/_layout/articles/"
       ]
     },
     "/(main)/_layout/analytics": {
@@ -453,6 +559,25 @@ export const routeTree = rootRoute
     "/(main)/_layout/": {
       "filePath": "(main)/_layout/index.tsx",
       "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/articles/$articleId": {
+      "filePath": "(main)/_layout/articles/$articleId.tsx",
+      "parent": "/(main)/_layout",
+      "children": [
+        "/(main)/_layout/articles/$articleId/edit"
+      ]
+    },
+    "/(main)/_layout/articles/new": {
+      "filePath": "(main)/_layout/articles/new.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/articles/": {
+      "filePath": "(main)/_layout/articles/index.tsx",
+      "parent": "/(main)/_layout"
+    },
+    "/(main)/_layout/articles/$articleId/edit": {
+      "filePath": "(main)/_layout/articles/$articleId/edit.tsx",
+      "parent": "/(main)/_layout/articles/$articleId"
     }
   }
 }
